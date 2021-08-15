@@ -1,0 +1,15 @@
+body {
+	padding: 5%;
+}
+.body {
+	text-align: center;
+}
+.nodetest{
+	position: fixed;
+	top: 30px;
+	left: 30px;
+	padding: 20px;
+}
+.nodetest a{
+	text-decoration: none;
+}

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Node ww3school</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<button class="nodetest" ><a href="nodetest.js">Node</a></button>
+<h1 class="body">Kien thuc Nodejs ngoai</h1>
+<p class="body">Nguon: <a href="https://www.youtube.com/watch?v=fPf88MxlnEQ&list=PLqnlyu33Xy-6g7IqU5-3BXOfewcJKoL08&index=11" target="_blank">video Youtube</a></p>
+<h2>Module</h2>
+<h3>Tao module</h3>
+<ul>
+<li>module.exports</li>
+</ul>
+<pre>
+	//bar.js
+	module.exports = function(){
+	  console.log('Hello')
+	}</pre>
+<h3>Goi module</h3>
+<ul>
+<li>require</li>
+</ul>
+<pre>
+	//app.js
+	var bar = require('./bar.js');
+	bar();
+</pre>
+<h2>Khai bao va su dung function</h2>
+<pre>
+	function sayHello(){
+	  console.log('I say Hello!!')
+	}
+
+	sayHello();
+	
+	//first-class function
+	function callSay(fn){
+	  fn()
+	}
+
+	callSay(sayHello);//thay fn bang sayHello
+</pre>
+<h2>Prototype ke thua</h2>
+<h3>format theo ngay VN</h3>
+<pre>
+	Date.prototype.format = function(){
+	  var yyyy = this.getFullYear();
+	  var mm = this.getMonth() + 1;
+	  var dd = this.getDate();
+	  var hours = this.getHours();
+	  var minutes = this.getMinutes(); 
+	  return dd + '-' + mm + "-" + yyyy + "\n" + hours +":"+minutes;
+	}
+
+	var now = new Date();
+	var oneDay = new Date(2021,10,2);
+
+	console.log(now.format());
+	console.log(oneDay.format());
+</pre>
+<h3>user ke thua person</h3>
+<pre>
+	function Person(name, password){
+	  this.name = name;
+	  this.password = password;
+	}
+	Person.prototype.getName = function(){
+	  return this.name;
+	}
+
+	Person.prototype.getPassword = function(){
+	  return this.password
+	}
+
+	Person.prototype.getLevel = function(){
+	  return this.level;
+	}
+	Person.prototype.level = "admin"
+
+	function User(name){
+	  this.name = name;
+	}
+	User.prototype = new Person();
+
+	var person1 = new Person("Teo", "1234")
+	console.log(person1.getName() +" "+person1.getPassword()+" "+person1.level)
+
+	var person2 = new User("Teo", "1234")
+	console.log(person2.getName() +" "+person2.getPassword()+" "+person2.level)
+</pre>
+<b>ket qua</b>
+<p>Teo 1234 admin</p>
+<p>Teo undefined admin</p>
+<h3>Ham tu chay</h3>
+<pre>
+	(function(lname){
+	  var fname = "Hoa";
+	  console.log(fname);
+	  console.log(lname)
+	}("Phuong"))
+</pre>
+<h2>Ket hop nhieu module</h2>
+<p>Tep 20tkvlogs</p>
+<ul><li>app.js ngoai cung</li></ul>
+<pre>
+	var greet = require("./greet/index.js") // hoac ./greet
+	
+	greet.english2();
+	greet.vietnamese2();
+</pre>
+<ul><li>thu muc greet</li></ul>
+<b>greetings.json</b>
+<pre>
+	{
+	    "en": "Hello",
+	    "vi": "xin chao"
+	}
+</pre>
+<b>english.js</b>
+<pre>
+	var greeting = require("./greetings.json")
+
+	var sayHello = function(){
+	    console.log(greeting.en)
+	};
+
+	module.exports = sayHello;
+</pre>
+<b>vietnamese.js</b>
+<pre>
+	var greeting = require("./greetings.json")
+
+	var sayHello = function(){
+	    console.log(greeting.vi)
+	};
+
+	module.exports = sayHello;
+</pre>
+<b>index,js</b>
+<pre>
+	var englis1 = require("./english");
+	var vietnames1 = require("./vietanmese")
+
+	module.exports = {
+	    english2: englis1,
+	    vietnamese2: vietnames1
+	}
+</pre>
+<h2>Cac cach khai bao module</h2>
+<p><p>Tep 20tkvlogs</p></p>
+<h3>Hello1.js</h3>
+<pre>
+	module.exports = function(){
+	    console.log("Hello1 word")
+	}
+</pre>
+<b>app.js</b>
+<pre>
+	var hello1 = require("./hello1");
+	hello1();
+</pre>
+<h3>Hello2.js</h3>
+<p>module.exports la object, co the gan thuoc tinh</p>
+<pre>
+	module.exports.sayHello = function() {
+	    console.log("Hello2 word")
+	}
+</pre>
+<b>app.js (1)</b>
+<pre>
+	var hello2a = require("./hello2");
+	hello2a.sayHello();
+</pre>
+<b>app.js (2)</b>
+<pre>
+	var hello2b = require("./hello2").sayHello;
+	hello2b();
+</pre>
+<h3>Hello3.js</h3>
+<p>Tao doi tuong va khoi tao san</p>
+<pre>
+	function Person(){
+	    this.message = "Hello3 word",
+	    this.sayHello = function() {
+	        console.log(this.message)
+	    }
+	}
+	module.exports = new Person()
+</pre>
+<b>app.js</b>
+<pre>
+	var hello3 = require("./hello3");
+	hello3.sayHello();
+
+	hello3.message = "change hello3 world"
+	hello3.sayHello()
+</pre>
+<h3>Hello4.js</h3>
+<p>tao doi' tuong nhung chua khoi tao san</p>
+<pre>
+	function Person(){
+	    this.message = "Hello4 word",
+	    this.sayHello = function() {
+	        console.log(this.message)
+	    }
+	}
+	module.exports = Person;
+</pre>
+<b>app.js</b>
+<pre>
+	var Hello4 = require("./hello4");
+	var hello4 = new Hello4();
+	hello4.sayHello();
+</pre>
+<h3>Hello5.js</h3>
+<p>exports nhu 1 doi' tuong</p>
+<pre>
+	var message = "Hello 5 word"
+	function sayHello(){
+	    console.log(message)
+	}
+	module.exports = {
+	    sayHello: sayHello
+	}
+</pre>
+<b>app.js (1)</b>
+<pre>
+	var hello5a = require("./hello5");
+	hello5a.sayHello();
+</pre>
+<b>app.js (2)</b>
+<pre>
+	var hello5b = require("./hello5").sayHello;
+	hello5b();
+</pre>
+
+
+<h2>Su dung module dung san nodejs</h2>
+<h3>util.format</h3>
+<pre>util.format(format, arg1, arg2,...);</pre>
+<ul>
+	<li>%s string</li>
+	<li>%d number</li>
+	<li>%j chuoi JSON</li>
+	<li>%i parseInt(value, 10)</li>
+</ul>
+<pre>
+	var util = require("util")
+
+	var lname = "Hoa";
+	var fname = "Nguyen"
+	var fullName = util.format('%s Thi %s', fname, lname);
+	console.log(fullName) //Nguyen Thi Hoa
+
+	util.log(fullName) //15 Aug 15:47:11 - Nguyen Thi Hoa
+</pre>
+<h2>Event Emitter (P1)</h2>
+<p>Tep 28tkvlogs</p>
+<b>emiiter.js</b>
+<pre>
+	function Emitter(){
+	    this.events = {};
+	}
+
+	Emitter.prototype.on = function(type, listener){
+	    this.events[type] = this.events[type] || [];
+	    this.events[type].push(listener);
+	}
+
+	// Emitter.prototype.emit = function(type){
+	//     if (this.events[type]) {
+	//         this.events[type].forEach(function(listener) {
+	//             listener();
+	//         });
+	//     } else console.log("chua cap nhat thong bao")
+	// }
+
+	Emitter.prototype.emit = function(type){
+	    if (this.events[type]) {
+	        this.events[type].forEach(function(listener){
+	            console.log(listener)
+	        })
+	    } else console.log("chua cap nhat thong bao")
+	}
+	module.exports = Emitter;
+</pre>
+
+<b>app.js</b>
+<pre>
+	var Emitter = require("./emitter");
+
+	var emitter = new Emitter();
+
+	// emitter.on("bad", function() {
+	//     console.log("Mot mon nao do bi diem kem!")
+	// })
+
+	// emitter.on("bad", function(){
+	//     console.log("Diem kem, can thong bao den phu huynh")
+	// })
+
+	emitter.on("bad","Mot mon nao do diem kem")
+	emitter.on("bad","thong bao phu huynh")
+
+	var score = [10,4];
+	for(var s of score) {
+	    if(s < 5) {
+	        console.log("Diem qua thap");
+	        emitter.emit("bad")
+	    }
+	}
+
+</pre>
+
+
+
+
+
+
+<h1 class="body">Node.js Tutorial</h1>
+<h2 class="body">Node.js Get Started</h2>
+<p>Tao file myfirst.js</p>
+<pre>
+	var http = require('http');
+
+	http.createServer(function (req, res) {
+	  res.writeHead(200, {'Content-Type': 'text/html'});
+	  res.end('Hello World!');
+	}).listen(8080);
+</pre>
+<p>Chay lenh Cmd</p>
+<pre>node myfirst.js</pre>
+<h2 class="body">Node.js Modules</h2>
+<h3>require()</h3>
+<pre>var http = require('http')</pre>
+<p>tao ra 1 server</p>
+<pre>
+http.createServer(function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.end('Hello World!');
+}).listen(8080);</pre>
+<h3>Create Module ca nhan</h3>
+<b>exports</b>
+<pre>
+	exports.myDateTime = function(){
+		return Date();
+	}
+</pre>
+<h2 class="body">Node.js HTTP Module</h2>
+<pre>require()</pre>
+<pre>createServer()</pre>
+
+<pre>
+	var http = require('http')
+
+	// Tao 1 server object
+	http.createServer(function(req, res) {
+		res.write('Hello World'); // viet 1 yeu cau
+		reg.end(); //ket thuc yeu cau
+	}).listen(8080)
+</pre>
+<h3>add an HTTP Header</h3>
+<pre> res.writeHead()</pre>
+<pre>
+	var http = require('http');
+	http.createServer(function(req,res){
+		res.writeHead(200, {'Content-Type': 'text/html'});
+		res.write('Hello World');
+		res.end();
+	}).listen(8080);
+</pre>
+<h3>Read the Query String</h3>
+<pre>
+	var http = require('http');
+	http.createServer(function(req, res) {
+		res.writeHead(200, {'Content-Type': 'text/html'});
+		res.write(req.url);
+		res.end();
+	}).listen(8080)
+</pre>
+<h3>Split the Query String</h3>
+<pre>
+	var http = require('http');
+	var url = require('url');
+
+	http.createServer(function(red,res) {
+		res.writeHead(200, {'Content-Type': 'text/html'});
+		var q = url.parse(req.url, true).query;
+		var txt = q.year + " " + q.month;
+		res.end(txt);
+	}).listen(8080);
+</pre>
+
+
+<h2 class="body">Node.js File System</h2>
+<pre>var fs = require('fs');</pre>
+<h3>Read Files fs.readFile()</h3>
+<pre>
+	var http = require('http');
+	var fs = require('fs');
+	http.createServer(function (req,res) {
+		fs.readFile('demofile1.html', function(err, data) {
+			res.writeHead(200, {'Content-Type': 'text/html'});
+			res.write(data);
+			return res.end;
+		})
+	})
+
+</pre>
+<h3>Create Files</h3>
+<ul>
+	<li>fs.appendFile()</li>
+	<li>fs.open()</li>
+	<li>fs.writeFile()</li>
+</ul>
+
+<h4>fs.appendFile(), ket noi voi file, neu khong co se tu tao moi a file</h4>
+<pre>
+	var fs = require('fs');
+
+	fs.appendFile('mynewfile1.txt', 'Hello content!', function(err) {
+		if (err) throw err;
+		console.log('Saved')
+	})
+</pre>
+<p><b>Note</b>:'Hello content' la noi dung ghi, neu file khong ton tai, thi se tao file moi, va trong file co noi dung Hello content</p>
+
+<h4>fs.open()</h4>
+<pre>
+	var fs = require('fs');
+
+	fs.open('mynewfile2.txt', 'w', function(err,file){
+		if (err) throw err;
+		console.log('saved');
+	})
+</pre>
+<p><b>Note</b>: 'w' se la bat buoc, neu file chua ton tai, se tu dong tao file moi, voi noi dung trong</p>
+
+<h4>fs.writeFile()</h4>
+<p>giong voi fs.appendFile</p>
+<p><b>Note</b>: nhung no se ghi de len noi dung cua file da ton tai. con append() se cap nhat noi' them vao</p>
+<pre>
+	var = require('fs')
+
+	fs.writeFile('mytextFile3.txt', 'Hello content', function(err) {
+		if (err) throw err;
+		console.log('saved');
+	})
+</pre>
+<h3>Update Files</h3>
+<ul>
+	<li>fs.append():</li>
+<p>Noi' noi dung vao cuoi' file</p>
+<pre>
+	var fs = require('fs')
+
+	fs.appendFile('mynewfile1.txt', 'this is my text', function(err){
+		if (err) throw err;
+		console.log('updated')
+	})
+</pre>
+	<li>fs.writeFile()</li>
+<p>replace noi dung da ton tai</p>
+<pre>
+	var fs = require('fs');
+	fs.writeFile('mynewFile3.txt', 'this is my text', function(err) {
+		if (err) throw err;
+		console.log('replaced')
+	})
+</pre>
+</ul>
+<h3>Delete Files fs.unlink()</h3>
+<pre>
+	var fs = require('fs')
+
+	fs.unlink('mynewfile2.txt', function(err){
+		if(err) throw err;
+		console.log('deleted')
+	})
+</pre>
+<h3>Rename Files fs.rename()</h3>
+<pre>
+	var fs = require('fs');
+
+	fs.rename('mynewfile1.txt', 'mynamedfile1.txt', function(err){
+		if(err) throw err;
+		console.log('renamed')
+	})
+</pre>
+<h2 class="body">Node.js URL</h2>
+<pre>var url = require('url')</pre>
+<p>url.parse() return ra object url</p>
+<pre>
+	var url = require('url');
+	var adr = 'http://localhost:8080/default.htm?year=2017&month=february';
+	var q = url.parse(adr, true);
+
+	console.log(q.host); // return "localhost:8080"
+	console.log(q.pathname); // return '/default.html'
+	console.log(q.search); //return '?year=2017&month=february'
+
+	var qdata=q.query // return object: {year: 2017,month: 'february'}
+	console.log(qdata.month);// return 'february'
+</pre>
+<h3>Node.js File Server</h3>
+<p>summer.html</p>
+<p>winter.html</p>
+<p>demo_fileserver.js</p>
+<pre>
+	var http = require('http');
+	var url = require('url');
+	var fs = require('fs');
+
+	http.createServer(function (req, res) {
+	  var q = url.parse(req.url, true);
+	  var filename = "." + q.pathname;
+	  fs.readFile(filename, function(err, data) {
+	    if (err) {
+	      res.writeHead(404, {'Content-Type': 'text/html'});
+	      return res.end("404 Not Found");
+	    } 
+	    res.writeHead(200, {'Content-Type': 'text/html'});
+	    res.write(data);
+	    return res.end();
+	  });
+	}).listen(8080);
+</pre>
+<h2 class="body">Node.js NPM</h2>
+<pre>npm install upper-case</pre>
+<h2 class="body">Node.js Events</h2>
+
+<h3>Events Module</h3>
+<pre>
+	var events = require('events');
+	var eventEmitter = new events.EventEmitter()
+</pre>
+<h3>EventEmitter</h3>
+<p>emit() thuc hien event</p>
+<pre>
+	var events = require('events');
+	var eventEmitter = new events.EventEmitter();
+
+	//Create an event handler:
+	var myEventHandler = function () {
+	  console.log('I hear a scream!');
+	}
+
+	//Assign the event handler to an event:
+	eventEmitter.on('scream', myEventHandler);
+
+	//Fire the 'scream' event:
+	eventEmitter.emit('scream');
+</pre>
+<h2 class="body">Node.js Upload Files</h2>
+<h3>Formidable Module</h3>
+<pre>npm install formidable</pre>
+
+<form action="fileupload" method="post" enctype="multipart/form-data">
+<input type="file" name="filetoupload"><br>
+<input type="submit">
+</form>
+
+<h3>Step 1: Create an Upload Form</h3>
+
+<pre>
+	var http = require('http');
+
+	http.createServer(function (req, res) {
+	  res.writeHead(200, {'Content-Type': 'text/html'});
+	  res.write('&lt;form action="fileupload" method="post" enctype="multipart/form-data">');
+	  res.write('&lt;input type="file" name="filetoupload">&lt;br>');
+	  res.write('&lt;input type="submit">');
+	  res.write('&lt;/form>');
+	  return res.end();
+	}).listen(8080);
+</pre>
+<h3>Step 2: Parse the Uploaded File</h3>
+
+<pre>
+	var http = require('http');
+	var formidable = require('formidable');
+
+	http.createServer(function(req, res){
+		if (req.url == '/fileupload') {
+			var form = new formidable.IncomingForm();
+			form.pares(req, function(err, fields, files) {
+				res.write('File uploaded');
+				res.end();
+			});
+		} else {
+			res.writeHead(200, {'Content-Type':'text/html'});
+			res.write('&lt;form action="fileupload" method="post" enctype="multipart/form-data">');
+			res.write('&lt;input type="file" name="filetoupload">&lt;br>');
+			res.write('&lt;input type="submit">');
+			res.write('&lt;/form>');
+			res.end();
+		}
+	}).listen(8080)
+</pre>
+
+<h3>Step 3: save</h3>
+<pre>
+	var http = require('http');
+	var formidable = require('formidable');
+	var fs = require('fs');
+
+	http.createServer(function(req,res){
+	  if (req.url == '/fileupload'){
+	    var form = new formidable.IncomingForm();
+	    form.parse(req, function(err, fields, files){
+	      var oldpath = files.fileoupload.path;
+	      var newpath = '/home/ubuntu/Desktop/Node ww3school.com/test/' + files.filetoupload.name;
+	      fs.rename(oldpath, newpath, function(err){
+	        if(err) throw err;
+	        res.write('File uploaded and moved!');
+	        res.end();
+	      });
+	    });
+	  } else {
+	    res.writeHead(200, {'Content-Type':'text/html'});
+	    res.write('&lt;form action="fileupload" method="post" enctype="multipart/form-data");
+	    res.write('&lt;input type="file" name="filetoupload">&lt;br>');
+	    res.write('&lt;input type="submit" name="submit">');
+	    return res.end();
+	  }
+	}).listen(8080)
+</pre>
+<h2 class="body">Node.js Email</h2>
+<pre>npm install nodemailer</pre>
+<h3>Send an Email</h3>
+<p>xem tai day <a href="https://www.w3schools.com/nodejs/nodejs_email.asp" target="_blank">Click</a></p>
+<h1 class="body">Node.js MySQL</h1>
+<h2 class="body">MySQL Get Started</h2>
+<h3>Cai dat</h3>
+
+<ul><li>B1: Tai MySQL APT Repository</li></ul>
+<a href="https://dev.mysql.com/downloads/repo/apt/" target="_blank">https://dev.mysql.com/downloads/repo/apt/</a>
+<ul><li>B2: di chuyen den thu muc chua, va chay lenh</li></ul>
+<p>Downloads, mo Ternimal, kiem tra file</p>
+<pre>	ls -l</pre>
+<p>cai dat file</p>
+<pre>	sudo dpkg -i mysql-apt-config_0.8.18-1_all.deb</pre>
+<p>lenh de kiem tra mysql-server</p>
+<pre>	sudo apt-cache search mysql-server</pre>
+<ul><li>B3: cai dat mysql-server</li></ul>
+<pre> sudo apt-get install mysql</pre>
+<p><b>Note</b>: Nho nhap mat khau, day la mat khau dang nhap root</p>
+<ul><li>B4: dang nhap</li></ul>
+<pre> sudo mysql -u root -p</pre>
+<p><b>Note</b>: mysql la ten cua he thogn luu tru, co the thay doi</p>
+<h3>start/stop/restart/status server</h3>
+<p>Co 2 dong lenh tuong tu:</p>
+<ul>
+	<li><pre>sudo server mysql stop</pre></li>
+	<li><pre>sudo systemctl stop mysql</pre></li>
+</ul>
+<h3>uninstall MySQL</h3>
+<pre>	1.sudo apt-get remove --purge mysql*</pre>
+<pre>	2.sudo apt-get purge mysql*</pre>
+<pre>	3.sudo apt-get autoremove</pre>
+<pre>	4.sudo apt-get autoclean</pre>
+<pre>	5.sudo apt-get remove dbconfig-mysql</pre>
+<br>
+<b>Hoac</b>
+<pre>	1.sudo apt-get remove mysql-server</pre>
+<pre>	2.sudo apt-get autoremove</pre>
+<pre>	3.sudo apt-get remove package-name (ten goi)</pre>
+<h3>Cai them MySQL Workbench truc quan xu ly data</h3>
+<a href="https://dev.mysql.com/downloads/workbench/" target="_blank">https://dev.mysql.com/downloads/workbench/</a>
+
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+
+remove npm/node: sudo apt-get remove nodejs
+Tim npm/node: which node
+xoa thu muc: sudo rm -rf /usr/local/bin/npm
+-----------------
+/cai node voi NVM de chon phien ban/
+B1: cai NVM
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+  source ~/.bashrc
+B2: xem list
+  nvm list-remote
+B3: cai dat
+  nvm install v14.17.4
+* co the doi phien ban
+  nvm ls
+  nvm use 10.16.3
+  nvm alias default 10.16.3
+* cap nhat npm:
+  npm install npm@latest -g
