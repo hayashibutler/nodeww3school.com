@@ -7,6 +7,44 @@
 </head>
 <body>
 <button class="nodetest" ><a href="nodetest.js">Node</a></button>
+<h1 class="body">Node & Expressjs tren F8</h1>
+<h2>Lay gia tri value</h2>
+<h3>GET dung query</h3>
+<pre>
+	app.get('/search', (req, res) => {
+	  // console.log(req.query.q)
+	  res.render('search')
+	});
+</pre>
+<p>tra ra gia tri</p>
+<h3>POST dung body</h3>
+<pre>
+	app.post('/search', (req, res) => {
+	  console.log(req.body)
+	  res.send('ket qua')
+	});
+</pre>
+<p>gui du lieu dang form</p>
+<p>Tra du lieu undefined. vi trong express khong tich hop san.</p>
+<p>Can phai goi method trong express (midleware)</p>
+<pre>
+	app.use(express.urlencoded({extended: true})) // POST, gui du lieu dang Form Data
+	app.use(express.json()) // POST javascript (XMLHttpRequest, fetch, axios)
+</pre>
+<h2 class="body">MongoDB</h2>
+<h3>Cài mongoDB server 4.4.8 và Compass (cài 5.0.2 bị lỗi) </h3>
+<h3>Lệnh tạo thư mục chưa data</h3>
+<pre>
+// Tạo thư mục
+sudo mkdir -p ~/Documents/mondodb-data
+
+// cấp toàn quyền cho thư mục
+sudo chmod 777 ~/Documents/mondodb-data
+
+// chạy monngodb
+mongod --dbpath ~/Documents/mondodb-data
+</pre>
+
 <h1 class="body">Kien thuc Nodejs ngoai</h1>
 <p class="body">Nguon: <a href="https://www.youtube.com/watch?v=fPf88MxlnEQ&list=PLqnlyu33Xy-6g7IqU5-3BXOfewcJKoL08&index=11" target="_blank">video Youtube</a></p>
 <h2>Module</h2>
@@ -257,7 +295,7 @@
 
 	util.log(fullName) //15 Aug 15:47:11 - Nguyen Thi Hoa
 </pre>
-<h2>Event Emitter (P1)</h2>
+<h2>Event Emitter (P1) gia lap events</h2>
 <p>Tep 28tkvlogs</p>
 <b>emiiter.js</b>
 <pre>
@@ -314,8 +352,610 @@
 	}
 
 </pre>
+<h2>Event Emitter (P2) events trong nodejs</h2>
+<pre>emitter.on(eventName, listener)</pre>
+<p>listener la 1 cai function</p>
+<b>config.js</b>
+<pre>
+	module.exports = {
+	    events: {
+	        BAD_SCORE: "bad",
+	        USER_CONNECTED: "connected"
+	    }
+	}
+</pre>
+<b>app.js</b>
+<pre>
+	var Emitter = require("events");
+	var eventConfig = require("./config")
+
+	var emitter = new Emitter();
+
+	emitter.on(eventConfig.BAD_SCORE, function() {
+	    console.log("Mot mon nao do bi diem kem!")
+	})
+
+	emitter.on(eventConfig.BAD_SCORE, function(){
+	    console.log("Diem kem, can thong bao den phu huynh")
+	})
+
+	var score = [10,4];
+	for(var s of score) {
+	    if(s < 5) {
+	        console.log("Diem qua thap");
+	        emitter.emit(eventConfig.BAD_SCORE)
+	    }
+	}
+</pre>
+<h2>object.create và prototypes</h2>
+<pre>
+	var person = {
+	    fname: "",
+	    lname: "",
+	    getFullName: function(){
+	        return this.fname + " " + this.lname
+	    }
+	}
+
+	var hoa = Object.create(person);
+	hoa.fname = "Thi";
+	hoa.lname = "Hoa";
+	console.log(hoa.getFullName())
+</pre>
+<h2>Kế thừa Event emitter (P1)</h2>
+<pre>
+	var EventEmitter = require("events");
+	var util = require("util");
+
+	function Dialog(){
+	    this.message = "Hello world!";
+	}
+
+	util.inherits(Dialog, EventEmitter);
+
+	Dialog.prototype.sayHello = function(data){
+	    console.log(this.message +" "+ data);
+	    this.emit("hello", data)
+	}
+
+	var dialog = new Dialog();
+
+	dialog.on("hello", function(data){
+	    console.log("Co 1 loi chao, "+data)
+	})
+
+	dialog.sayHello("Hoa")
+</pre>
+<h2>ES6 Template literals</h2>
+<pre>
+	var person = {
+		name: "Hoa",
+		age: 25
+	}
+
+	console.log("Toi la " + person.name + ", toi " + person.name + "tuoi")
+	//template literals
+	console.log(`Toi la ${person.name}, toi ${person.age} tuoi`)
+
+</pre>
+<b>Note</b>
+<p>Xuong dong thoai mai, format du'ng voi template</p>
+<h2>Javascript .call và .apply</h2>
+<pre>
+	var obj = {
+	    name: "Hoa",
+	    sayHello: function(){
+	        console.log(`Hello ${this.name}`)
+	    }
+	}
+
+	obj.sayHello();
+	// thay doi gia tri thuoc tinh
+	obj.sayHello.call({name: "Phuong"}) // return Hello Phuong
+	// thay doi gia tri thuoc tinh
+	obj.sayHello.apply({name: "Tien"}) // return Hello Tien
+</pre>
+<b>truy tham so param1, param2</b>
+<pre>
+	var obj = {
+	    name: "Hoa",
+	    sayHello: function(param1, param2){
+	        console.log(`Hello ${this.name}`);
+	        console.log(`Params:`, param1, param2)
+	    }
+	}
+
+	obj.sayHello("nam", "2018");
+	// thay doi gia tri thuoc tinh, truyen tham so tung phan
+	obj.sayHello.call({name: "Phuong"}, "nam", "2019") // return Hello Phuong
+	// thay doi gia tri thuoc tinh, truyen tham so array
+	obj.sayHello.apply({name: "Tien"}, ["nam", "2020"]) // return Hello Tien
+</pre>
+<h2>Kế thừa Event emitter (P2)</h2>
+<pre>
+	var util = require("util");
+
+	function Person(){
+	    this.fname = "Hoa";
+	    this.lname = "Mai"
+	}
+
+	Person.prototype.sayHello = function(){
+	    console.log("Hello " + this.lname +" "+this.fname)
+	}
+
+	function Student(){
+	    Person.call(this); //goi luon gia tri cua thuoc tinh Hoa, Mai
+	    this.id = "1234"
+	}
+
+	util.inherits(Student, Person);
+
+	var sv = new Student();
+
+	console.log(sv);
+	console.log(sv.id);
+	sv.sayHello();
+</pre>
+<h2>ES6 class</h2>
+<b>dung 'use strict' de su dung class</b>
+<p>1 cach tao doi' tuong ke thua, thay cho prototype</p>
+<pre>
+	'use strict'
+
+	class Person{
+	    constructor(lname, fname){
+	        this.lname = lname,
+	        this.fname = fname
+	    }
+
+	    // dinh nghia function
+	    sayHello() {
+	        console.log("Hello "+this.lname+" "+this.fname)
+	    }
+	}
+	----thay the----
+	function Person(){
+	  this.fname = "Hoa";
+	  this.lname = "Mai"
+	}
+
+	Person.prototype.sayHello = function(){
+	    console.log("Hello " + this.lname +" "+this.fname)
+	}
+	----thay the----
+
+	var hoa = new Person("Hoa", "Mai")
+	hoa.sayHello();
+</pre>
+<h2> Event emitter (P3)</h2>
+<p>viet lai emitter P1 voi class</p>
+<b>dung extend de ke thua, va dung super() de su dung</b>
+<p>tep 36tkvlogs</p>
+<pre>
+	'use strict'
+
+	var EventEmitter = require("events");
+
+	class Dialog extends EventEmitter {
+	    constructor(){
+	        super();
+	        this.message = "Hello world"
+	    }
+	    sayHello(data){
+	        console.log(`${this.message}: ${ data }`);
+	        this.emit("hello", data)
+	    }
+	}
+
+	var Dialog = require("./dialog")
+
+	var dialog = new Dialog();
+
+	dialog.on("hello", function(data){
+	    console.log("Co 1 loi chao, "+data)
+	})
+
+	dialog.sayHello("Hoa")
+</pre>
+<h2>Callback</h2>
+<p>chi goi 1 ham cuoi, cac ham trong setTimeout se thuc hien truoc</p>
+<b>setTimeout()</b>
+<pre>
+	function firstFn(){
+	    console.log("ham 1, khong can goi")
+	}
+
+	function secondFn(){
+	    setTimeout(firstFn,3000);
+	    console.log("ham 2, chi can goi")
+	}
+
+	secondFn();
+
+	//ham 2, chi can goi
+	//ham 1, khong can goi
+</pre>
+
+<h2>stream va buffer</h2>
+<h2>Buffer</h2>
+<p>lam viec voi bang ma ki tu</p>
+<pre>
+	var buffer = new Buffer("Xin chào", "utf8")
+
+	console.log(buffer) //58 69 6e 20 63 68 61 6f
+
+	console.log(buffer.toString()) //Xin chao (mac dinh "utf8")
+	console.log(buffer.toString("ascii")) //Xin chC o
+	console.log(buffer.toJSON()) // {type: 'Buffer', data: [88, 105, 110,  32,  99, 104, 195, 160,  111]}
+</pre>
+<h2>TypedArray</h2>
+<p>Int8Array, Int16Array, Int32Array, Float64Array</p>
+<pre>
+	var buffer = new ArrayBuffer(4);
+
+	var view = new Int8Array(buffer);
+
+	view[0] = 5;
+	view[1] = 10;
+	view[2] = 3;
+
+	console.log(buffer) //ArrayBuffer { [Uint8Contents]: <05 0a 03 00>, byteLength: 4 }
+
+	console.log(view) //Int8Array(4) [ 5, 10, 3, 0 ]
+
+</pre>
+<h2>Callback (p2)</h2>
+<pre>
+	function readData(callback){
+	    // read done
+	    var user = {
+	        name: "Hoa"
+	    }
+	    callback(user)
+	}
+
+	readData(function(data){
+	    console.log("read data lan 1 ")
+	    console.log("Data : ", data)
+	})
+
+	readData(function(data){
+	    console.log("read data lan 2")
+	    console.log("User : " + data.name)
+	})
+</pre>
+<h2>File (fs)</h2>
+<pre>
+	var fs = require("fs")
+
+	// readFileSync (dong bo)
+	var read = fs.readFileSync(__dirname + "/database.txt", "utf8");
+	console.log(read)
+
+	// readFile (khong dong bo)
+	fs.readFile(__dirname + "/database.txt","utf8", function(err, data){
+	    console.log(data)
+	})
+
+</pre>
+<h2>stream</h2>
+<p>chunk la manh nho cua stream</p>
+<pre>
+	var fs = require("fs");
+
+	var readFile = fs.createReadStream(__dirname + "/database.txt", {
+	    encoding: "utf8",
+	    highWaterMark: 1024*70 //10k
+	})
+	var writeFile = fs.createWriteStream(__dirname + "/database2.txt")
+
+	readFile.on("data", function(chunk){
+	    console.log(chunk.length) //mac dinh la 64k tra ve. highWaterMark de thay doi
+	    writeFile.write(chunk);
+	    console.log("coppied")
+	})
+</pre>
+<h2>PIPE dung voi thu vien zlib</h2>
+<pre>
+	var fs = require("fs");
+	// thu vien nen file
+	var zlib = require("zlib")
+
+	var readFile = fs.createReadStream(__dirname + "/database.txt", {
+	    encoding: "utf8"
+	});
+
+	var writeFile = fs.createWriteStream(__dirname + "/database2.txt")
+	// tao 1 file nen
+	var gzip = zlib.createGzip()
+	// noi luu file da nen
+	var compress = fs.createWriteStream(__dirname + "/database.txt.gz")
+
+	//copy
+	readFile.pipe(writeFile);
+
+	//compress. gzip tao file ne, compress de luu file
+	readFile.pipe(gzip).pipe(compress)
+</pre>
+<h2>TCP/IP</h2>
+<h2>server voi Nodejs</h2>
+<pre>
+	var http = require("http")
+
+	http.createServer(function(req, res){
+
+	    res.writeHead(200, {'Content-Type': 'text/plain'})
+	    res.end("hello web from Nodejs")
+
+	}).listen(1111, "127.0.0.1")
+</pre>
+<h2>Mo html tren nodejs server</h2>
+<pre>
+	var http = require("http")
+	var fs = require("fs")
+
+	http.createServer(function(req, res){
+
+	    res.writeHead(200, {'Content-Type': 'text/html'})
+	    var html = fs.readFileSync(__dirname + "/index.html", "utf-8")
+
+	    var user = "Hoa Mai";
+	    html = html.replace("user", user)
+
+	    res.end(html)
+
+	}).listen(1111, "127.0.0.1")
+</pre>
+<h2>Cai thien hieu nang doc file voi PIPE</h2>
+<b>createReadStream().pipe()</b>
+<pre>
+	var http = require("http");
+	var fs = require("fs");
+
+	http.createServer(function(req, res){
+
+	    res.writeHead(200, {'Content-Type':'text/html'});
+	    fs.createReadStream(__dirname + "/index.html").pipe(res);
+
+	}).listen(1111,"127.0.0.1")
+</pre>
+<h2>JSON từ webserver</h2>
+<pre>
+	var http = require("http");
+	var fs = require("fs");
+
+	http.createServer(function(req, res){
+
+	    res.writeHead(200, {'Content-Type':'application/json'});
+	    var obj = {
+	        fname: "Hoa",
+	        lname: "Mai"
+	    }
+	    res.end(JSON.stringify(obj))
+	}).listen(1111,"127.0.0.1")
+</pre>
+<h2>Dinh tuyen url</h2>
+<pre>
+	var http = require("http");
+	var fs = require("fs");
+
+	http.createServer(function(req, res){
+	    if (req.url === "/" || req.url === "/index.html") {
+
+	        res.writeHead(200, {'Content-Type':'text/html'}); // dong nay ko co cung duoc
+	        fs.createReadStream(__dirname + "/index.html").pipe(res)
+	    } else  if (req.url === "/api"){
+	        res.writeHead(200, {'Content-Type':'application/json'}); //ko co cung duoc
+	        var obj = {
+	            fname: "Hoa",
+	            lname: "Mai"
+	        };
+	        res.end(JSON.stringify(obj));
+	    } else {
+	        res.writeHead(404)
+	        res.end("Not found")
+	    }
+	}).listen(1111,"127.0.0.1", function(){
+	    console.log("Da khoi tao server: http://localhost:1111")
+	})
+</pre>
+<h2>VERSIONING SEMANTIC</h2>
+<a href="https://semver.org/" target="_blank">Tham khao https://semver.org/</a>
+<p><b>MAJOR.MINOR.PATCH</b></p>
+<p>2.0.0</p>
+<ul>
+	<li>MAJOR: gan nhu hoan toan moi</li>
+	<li>MINOR: them tinh nang</li>
+	<li>PATCH: fix bug</li>
+</ul>
+<h2>INT, NODEMON và PACKAGE.JSON (P1)</h2>
+<pre>npm init
+npm i --save lodash</pre>
+<b>package.json</b>
+<pre>
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "description": "my first app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lam",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
+</pre>
+<b>^4.17.21: ^ cap nhat tat ca. thay bang ~ chi cap nhat PATCH</b>
+<pre>
+	var _ = require("lodash")
+
+	var array = [1];
+	var other = _.concat(array,1,[2],[[4]])
+	console.log(other)
+
+	var dif = _.difference([2,1],[2,3])
+	console.log(dif)
+
+	var users = [
+	    { 'user': 'barney',  'age': 36, 'active': true },
+	    { 'user': 'fred',    'age': 40, 'active': false },
+	    { 'user': 'pebbles', 'age': 1,  'active': true }
+	  ];
+
+	var find1 = _.find(users, function(user) {return user.age <40}, 1)
+	console.log("age<40 ",find1)
+
+	var find2 = _.find(users, ['age', 40])
+	console.log("age = 40 ",find2)
+
+	var find3 = _.find(users, {'active': true})
+	console.log(find3)
+
+	var filter = _.filter(users, function(user) {return user.age < 40})
+	console.log(filter)
+</pre>
+<h2>NPM Global</h2>
+<p>kiem tra noi chu'a node-module de cai global</p>
+<pre>	npm root -g</pre>
+<pre>	npm install -g ...</pre>
+<h2>INT, NODEMON và PACKAGE.JSON (P2)</h2>
+<p>Cai thu muc node_modules khi co san file package.json</p>
+<pre>	npm install</pre>
+<pre>	npm init // cai moi' hoan toan</pre>
+<p>update tinh nang</p>
+<pre>	npm update</pre>
+<p>cai cac tien ich (ko bat buoc)</p>
+<pre>	npm install mocha chai grunt --save-dev</pre>
+<pre> nodemon app.js</pre>
+<h2>Cài đặt EXPRESS và xây dựng một WEB SERVER hoàn chỉnh</h2>
+<pre>npm install express --save</pre>
+<pre>
+	var express = require("express")
+
+	var app = express();
+
+	var port = 3000;
+
+	app.get("/", function(req, res) {
+	  res.send("&lt;h1>hello expresss&lt;/h1>")
+	});
+	app.get("/api", function(req, res) {
+	  res.json({
+	    lname: "hoa",
+	    fname: "mai"
+	  })
+	})
+	app.listen(port, function(){
+	  console.log("sever: http://localhost:3000")
+	})
+</pre>
+<h2>Routing dinh tuyen</h2>
+<pre>
+	app.get("/user/:id", function(req, res){
+	  res.send(`Hello ${req.params.id}`)
+	})
+</pre>
+<p>??? mo 1 trang html??</p>
+<h2>MIDDLEWARE trong express</h2>
+<pre>
+	var express = require("express")
+
+	var app = express();
+
+	var port = 3000;
+
+	//custom middleware
+	app.use("/", function(req, res, next) {
+	  console.log('Request URL: ', req.url);
+	  req.requestTime = new Date();
+	  next();
+	})
+	// co san
+	app.use("/public", express.static(__dirname +"/public"))
 
 
+	app.get("/", function(req, res) {
+	  // doc file hien thi ra
+	  res.send(`
+	  &lt;link href="/public/style.css" rel="stylesheet" type="text/css">
+	  &lt;h1>hello expresss&lt;/h1>
+	  &lt;p>Request Time: ${req.requestTime}&lt;/p>
+	  `)
+	});
+	app.get("/api", function(req, res) {
+	  res.json({
+	    lname: "hoa",
+	    fname: "mai"
+	  })
+	})
+
+	app.get("/user/:id", function(req, res){
+	  res.send(`Hello ${req.params.id}`)
+	})
+
+	app.listen(port, function(){
+	  console.log("sever: http://localhost:3000")
+	})
+</pre>
+<h2>#71 TEMPLATE và TEMPLATE ENGINE</h2>
+<p>tep 71tkvlogs</p>
+
+<p>express dung duoc nhieu template</p>
+<a href="https://ejs.co/" target="_blank">https://ejs.co/</a>
+<pre>npm install ejs --save</pre>
+<p>khong can dung var ejs = require('ejs'). Vi ejs da cai trong express. Dung lenh app.set()</p>
+
+<pre>
+	app.set('view engine', 'ejs')</pre>
+<pre>
+	app.get("/", function(req, res) {
+	    res.render('index');
+	});
+</pre>
+<pre>
+	app.get("/user/:id", function(req, res){
+	    res.render('user', { ID : req.params.id})
+	})
+</pre>
+<h2>#72 NodeJS - QUERYSTRING và POST PARAMETER</h2>
+<p>tep 72tkvlogs</p>
+<pre>https://www.google.com/search?q=google&oq=go&aqs=chrome.0.69i59j69i57j35i39j0i131i433i512l2j69i60l3.2360j0j4&sourceid=chrome&ie=UTF-8</pre>
+<p>Query string: q=google&oq=go&aqs=chrome.0.69i59j69i57j35i39j0i131i433i512l2j69i60l3.2360j0j4&sourceid=chrome&ie=UTF-8</p>
+
+<p>cai middleware boby-parser tai <a href="https://expressjs.com/en/resources/middleware.html" target="_blank">express</a></p>
+<p>lay thu vien <a href="https://code.jquery.com/">jQuery</a></p>
+
+<h2>#74 NodeJS - Cấu trúc một ứng dụng</h2>
+<p>Tao nhanh ung dung gom folder va file mau voi <a href="http://expressjs.com/en/starter/generator.html" target="_blank">express-generator</a></p>
+<pre>npx express-generator</pre>
+<h2>ANGULARJS</h2>
+<p>du an note todo</p>
+<p>chen vao html</p>
+<p><a href="https://www.bootstrapcdn.com/" target="_blank">bootstrapCDN</a>: bo https de tu load htpp hoac https</p>
+<pre>
+	&lt;link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+	&lt;link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css">
+</pre>
+
+<p><a href="https://angularjs.org/">angularjs</a></p>
+<pre>
+&lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js">&lt;/script>
+</pre>
+<h3>ngRepeat</h3>
+<p>Dung nhu ham lap for, de hien thi danh sach</p>
+<h3>ngModel</h3>
+<p>lay theo trang thai true/false. Lam cai checkbox</p>
+<h3>ngClass</h3>
+<p>tu dong thay doi class</p>
+<pre>	ng-class="{ strike: todo.isDone}</pre>
+<h3>angular xeditable</h3>
+<p>chinh sua noi dung</p>
+<p><a href="https://cdnjs.com/libraries/angular-xeditable" target="_blank">cdn xeditable</a></p>
+<p><a href="https://vitalets.github.io/angular-xeditable/" target="_blank">Su dung xeditable</a></p>
 
 
 
