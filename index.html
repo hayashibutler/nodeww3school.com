@@ -7,8 +7,677 @@
 </head>
 <body>
 <button class="nodetest" ><a href="nodetest.js">Node</a></button>
-<h1 class="body">Node & Expressjs tren F8</h1>
-<h2>Lay gia tri value</h2>
+<h1>Làm quen với VScode</h1>
+	<h2>Shortkey</h2>
+	<ul>
+		<li>Ctrl + P: chuyển file</li>
+		<li>Ctrl + Shift + P: phím tắt</li>
+		<li>Ctrl + O: di chuyển lên class, function</li>
+		<li>Ctrl + 2: tách thành 2 màn hình</li>
+	</ul>
+	<h2>Module</h2>
+	<ul>
+		<li>Tạo module (xuất)</li>
+		<pre>
+			var chao = function(name){
+				console.log('hello ' + name)
+			};
+			var tuoi = 18;
+			module.exports.c = chao;
+			module.exports.t = tuoi;
+		</pre>
+		<li>Dùng module (require)</li>
+		<pre>
+			var dungthu = require("./module1.js")
+
+			dungthu.c('lam')
+			console.log(dungthu.t)
+		</pre>
+	</ul>
+	<h3>Cac cach khai bao module</h3>
+		<p>Tep 20tkvlogs</p>
+		<h3>Hello1.js</h3>
+		<pre>
+			module.exports = function(){
+				console.log("Hello1 word")
+			}
+		</pre>
+		<b>app.js</b>
+		<pre>
+			var hello1 = require("./hello1");
+			hello1();
+		</pre>
+		<h3>Hello2.js</h3>
+		<p>module.exports la object, co the gan thuoc tinh</p>
+		<pre>
+			module.exports.sayHello = function() {
+				console.log("Hello2 word")
+			}
+		</pre>
+		<b>app.js (1)</b>
+		<pre>
+			var hello2a = require("./hello2");
+			hello2a.sayHello();
+		</pre>
+		<b>app.js (2)</b>
+		<pre>
+			var hello2b = require("./hello2").sayHello;
+			hello2b();
+		</pre>
+		<h3>Hello3.js</h3>
+		<p>Tao doi tuong va khoi tao san</p>
+		<pre>
+			function Person(){
+				this.message = "Hello3 word",
+				this.sayHello = function() {
+					console.log(this.message)
+				}
+			}
+			module.exports = new Person()
+		</pre>
+		<b>app.js</b>
+		<pre>
+			var hello3 = require("./hello3");
+			hello3.sayHello();
+
+			hello3.message = "change hello3 world"
+			hello3.sayHello()
+		</pre>
+		<h3>Hello4.js</h3>
+		<p>tao doi' tuong nhung chua khoi tao san</p>
+		<pre>
+			function Person(){
+				this.message = "Hello4 word",
+				this.sayHello = function() {
+					console.log(this.message)
+				}
+			}
+			module.exports = Person;
+		</pre>
+		<b>app.js</b>
+		<pre>
+			var Hello4 = require("./hello4");
+			var hello4 = new Hello4();
+			hello4.sayHello();
+		</pre>
+		<h3>Hello5.js</h3>
+		<p>exports nhu 1 doi' tuong</p>
+		<pre>
+			var message = "Hello 5 word"
+			function sayHello(){
+				console.log(message)
+			}
+			module.exports = {
+				sayHello: sayHello
+			}
+		</pre>
+		<b>app.js (1)</b>
+		<pre>
+			var hello5a = require("./hello5");
+			hello5a.sayHello();
+		</pre>
+		<b>app.js (2)</b>
+		<pre>
+			var hello5b = require("./hello5").sayHello;
+			hello5b();
+		</pre>
+	<h2>NPM</h2>
+		<h3>Khái niệm</h3>
+			<p>hệ thống quản lý các module, node package manager</p>
+			<ul>
+				<li>Có săn trong nhân của nodejs</li>
+				<li>Tự viết</li>
+				<li>Của người khác</li>
+			</ul>
+		<h3>Cài đặt</h3>
+		<p>cai moi' hoan toan: tạo file package.json</p>
+		<pre>
+			npm init
+		</pre>
+		<p>Cai thu muc node_modules khi co san file package.json</p>
+		<pre>
+			npm install
+			npm i
+		</pre>
+		<p>cai vào môi trường dev</p>
+		<pre>
+			npm install ... --save-dev
+			npm i ... --save-dev
+		</pre>
+		<p>update tinh nang</p>
+		<pre>
+			npm update
+		</pre>
+		<pre>
+			nodemon app.js
+		</pre>
+		<b>package.json</b>
+<pre>
+	{
+		"name": "my-app",
+		"version": "1.0.0",
+		"description": "my first app",
+		"main": "app.js",
+		"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+		},
+		"author": "lam",
+		"license": "MIT",
+		"dependencies": {
+		"lodash": "^4.17.21"
+		}
+	}
+</pre>
+			<b>^4.17.21: ^ cap nhat tat ca. thay bang ~ chi cap nhat PATCH</b>
+<pre>
+	var _ = require("lodash")
+
+	var array = [1];
+	var other = _.concat(array,1,[2],[[4]])
+	console.log(other)
+
+	var dif = _.difference([2,1],[2,3])
+	console.log(dif)
+
+	var users = [
+		{ 'user': 'barney',  'age': 36, 'active': true },
+		{ 'user': 'fred',    'age': 40, 'active': false },
+		{ 'user': 'pebbles', 'age': 1,  'active': true }
+		];
+
+	var find1 = _.find(users, function(user) {return user.age &lt;40}, 1)
+	console.log("age&lt;40 ",find1)
+
+	var find2 = _.find(users, ['age', 40])
+	console.log("age = 40 ",find2)
+
+	var find3 = _.find(users, {'active': true})
+	console.log(find3)
+
+	var filter = _.filter(users, function(user) {return user.age &lt; 40})
+	console.log(filter)
+</pre>
+<h3>Upload module lên NPM</h3>
+<ol>
+	<li>Tạo file module gồm file package.json</li>
+	<li>Đăng ký tài khoản quản lý npmjs.com</li>
+	<li>lệnh login và publish</li>
+<pre>
+	npm login
+	npm publish
+</pre>
+</ol>
+	<h2>webserver và cách đọc file</h2>
+		<h3>Hàm dựng server</h3>
+<pre>
+	var http = require("http")
+
+	http.createServer(function(req, res){
+	    res.writeHead(200, {'Content-Type': 'text/plain'})
+	    res.end("hello web from Nodejs")
+	}).listen(1111, "127.0.0.1")
+	----
+	"127.0.0.1" mặc định là hostlocal, có thể bỏ qua
+</pre>
+		<p>Đọc file html: 'Content-Type': 'text/html'</p>
+		<p>Đọc file json: 'Content-Type': 'application/json'</p>
+		<h3>Đọc file html</h3>
+		<p>fs dùng để đọc file</p>
+		<li>fs.ReadStream</li>
+<pre>
+	var http = require('http');
+	var fs = require('fs')
+
+	http.createServer(function(req, res){
+		res.writeHead(200,{"content-type":"text/html; charset=utf-8"});
+		fs.ReadStream("giaodien.html").pipe(res);
+	}).listen(1234)
+	----
+	tạo server > loại dữ liệu cần đọc > đọc file > bỏ vào ống dẫn res > lắng ngeh cổng 1234
+</pre>
+		<li>fs.readFile</li>
+<pre>
+	var http = require('http')
+	var fs = require('fs')
+
+	http.createServer(function(req,res){
+		fs.readFile(__dirname + "/giaodien.html", "utf8", function(err, content){
+			if(err) {
+				console.log(err)
+			} else {
+				res.writeHead(200, {"Content-type":"text/html"})
+				res.write(content)
+				res.end()
+			}
+		})
+	}).listen(3000);
+</pre>
+	<p><b>1 cách dạy khác</b></p>
+<pre>
+	var http = require("http")
+	var fs = require("fs")
+
+	http.createServer(function(req, res){
+		res.writeHead(200, {'Content-Type': 'text/html'})
+		var html = fs.readFileSync(__dirname + "/index.html", "utf-8")
+
+		var user = "Hoa Mai";
+		html = html.replace("user", user)
+
+		res.end(html)
+	}).listen(1111, "127.0.0.1")
+</pre>
+	<p>Cai thien hieu nang doc file voi PIPE</p>
+	<b>createReadStream().pipe()</b>
+<pre>
+	var http = require("http");
+	var fs = require("fs");
+
+	http.createServer(function(req, res){
+		res.writeHead(200, {'Content-Type':'text/html'});
+		fs.createReadStream(__dirname + "/index.html").pipe(res);
+	}).listen(1111,"127.0.0.1")
+</pre>
+	<h2>Router</h2>
+	<h3>router1.js</h3>
+<pre>
+	var http = require('http');
+	var router = require('./router2')
+
+	http.createServer(router.loadRouter).listen(3000)
+</pre>
+	<h3>router2.js</h3>
+<pre>
+	var fs = require('fs')
+
+	var loadFile = function(name, res) {
+		res.writeHead(200, {"Content-type":"text/html"})
+		fs.ReadStream(name).pipe(res)  
+	}
+
+	var loadRouter = function(req, res) {
+		switch (req.url) {
+			case "/":
+				loadFile("giaodien.html", res)
+				break;
+			case "/tintuc":
+				loadFile("giaodien1.html", res)
+				break;
+			default:
+				loadFile("404.html", res)
+				break;
+		}
+	}
+
+	module.exports.loadRouter = loadRouter
+</pre>
+	<p><b>1 cách khác, dùng hàm if else</b></p>
+<pre>
+	var http = require("http");
+	var fs = require("fs");
+
+	http.createServer(function(req, res){
+	    if (req.url === "/" || req.url === "/index.html") {
+
+	        res.writeHead(200, {'Content-Type':'text/html'}); // dong nay ko co cung duoc
+	        fs.createReadStream(__dirname + "/index.html").pipe(res)
+	    } else  if (req.url === "/api"){
+	        res.writeHead(200, {'Content-Type':'application/json'}); //ko co cung duoc
+	        var obj = {
+	            fname: "Hoa",
+	            lname: "Mai"
+	        };
+	        res.end(JSON.stringify(obj));
+	    } else {
+	        res.writeHead(404)
+	        res.end("Not found")
+	    }
+	}).listen(1111,"127.0.0.1", function(){
+	    console.log("Da khoi tao server: http://localhost:1111")
+	})
+</pre>
+	<h2>Express</h2>
+		<h3>Khởi tạo mới 1 project với Express</h3>
+		<li>Cài đặt express-generator</li>
+<pre>
+	$ npm install -g express-generator
+</pre>
+		<li>Tạo project mới</li>
+<pre>
+	$ npm [tenproject]
+</pre>
+		<li>cài đặt các gói phụ thuộc</li>
+<pre>
+	$ npm install
+</pre>
+	<h2>EJS - template engine của Express</h2>
+		<p>js có thể viết ra html, nhưng phải viết trong res.write("&lt;h1>Nội dung&lt;/h1>h1>")</p>
+		<p><b>Vậy làm sao có thể viết html ngay trong js?</b> => dùng <b>EJS</b></p>
+		<li>Tạo 1 project mới với ejs</li>
+<pre>
+	$ npm install [tenproject] -e
+</pre>
+		<li>Khai báo biến và hiển thị kết quả</li>
+<pre>
+	&lt;% %> Khai báo
+		&lt;% var b = 18 %>
+
+	&lt;%= %> Hiển thị giá trị 
+		&lt;h2>Biến b có giá trị là: &lt;%= b %>&lt;/h2>
+
+	&lt;%- %> Hiển thị giá trị html được render 
+		&lt;% var y = "&lt;h1>hello&lt;/h1>" %>
+		&lt;%- y %>
+</pre>
+		<p>Ví dụ</p>
+<pre>
+	&lt;% for (var i =1; i &lt; 11; i++) { %>
+		&lt;h1>Xin chào lần &lt;%= i %>&lt;/h1>
+	&lt;% } %>
+</pre>
+	<h2>Router trong EJS</h2>
+<pre>
+	router.get('/', function(req, res, next) {
+		res.render('index', { title: 'Express' });
+	  });
+</pre>
+	<h2>Nhóm router</h2>
+	<p>routes/beauty-fashion.js</p>
+<pre>
+	var express = require('express')
+	var router = express.Router()
+
+	// GET star-style.chn
+	router.get('/star-style.chn', function(req, res, next){
+		res.send('beauty-fashion > star-style.chn')
+	})
+	//  GET lam-dep.chn
+	router.get('/lam-dep.chn', function(req, res, next){
+		res.send('beauty-fashion > lam-dep.chn')
+	})
+
+	module.exports = router;
+</pre>
+	<p>app.js</p>
+
+<pre>
+	...
+	var beautyFashionRouter = require('./routes/beauty-fashion');
+	...
+	app.use('/beauty-fashion', beautyFashionRouter);
+	...
+</pre>
+	<h2>tham số param Router</h2>
+	<li>truyền tham số: dùng dấu 2 chấm (:)</li>
+<pre>
+	/sp/:id
+</pre>
+	<li>lấy tham số: dùng req.params.ten-tham-so</li>
+<pre>
+	router.get('/sp/:id', function(req, res, next) {
+		res.send('Mã sản phẩm là ' + req.params.id);
+	});
+
+	router.get("/user/:id", function(req, res){
+	    res.render('user', { ID : req.params.id})
+	})
+</pre>
+	<li>truyền nhiều tham số</li>
+	<p>Dùng dấu chấm (.), gạch ngang (-), gạch chéo (/)</p>
+<pre>
+	/sp/:id-:cost
+	/sp/:id.:cost
+	/sp/:id/:cost
+
+	router.get('/sp/:id-:cost', function(req, res, next) {
+		res.send(`Mã sản phẩm ${req.params.id} có giá ${req.params.cost}`);
+	});
+</pre>
+	<h3>Cách đặt url giống tinhte</h3>
+	<p>Có thể thay đổi bất kì kí tự nào ở giữ, luôn giữ cố định id</p>
+	<p>Thân thiện với SEO</p>
+	<li>Regular expression</li>
+<pre>
+	chấm hỏi ? : có hoặc không có 1 ký tự hoặc nhóm kí tự trước đó
+	/monhoc?:course // có hoặc không có chữ 'c'
+
+	dấu ngoặc đơn () : nhóm 1 cụm từ lại
+	/(monhoc)?:course // có hoặc không có nhóm chữ 'monhoc'
+
+	dấu sao (*) : thay thế bất kì ký tự nào
+	'/monhoc*-:course' 
+</pre>
+	<li>Truyền tham số</li>
+	<h2>JSON từ webserver</h2>
+	<li>Hiển thị json trên 1 trang riêng không dùng template EJS</li>
+<pre>
+	http.createServer(function(req, res){
+	    res.writeHead(200, {'Content-Type':'application/json'});
+	    var obj = {
+	        fname: "Hoa",
+	        lname: "Mai"
+	    }
+	    res.end(JSON.stringify(obj))
+	}).listen(1111,"127.0.0.1")
+</pre>
+	<li>Hiển thị nội dung json trong trang dùng EJS</li>
+	<p>index.js</p>
+<pre>
+	router.get('/sanpham', function(req, res, next) {
+		const data = {sanpham: ["sữa", "trứng", "nước ngọt", "bánh"]}
+		res.render('sanpham', { danhsach: data });
+	  });
+</pre>
+	<p>sanpham.ejs</p>
+<pre>
+	&lt;h1>Danh sách sản phẩm&lt;/h1>
+	&lt;%
+		danhsach.sanpham.forEach(function(item){
+	%>
+		&lt;li>
+			&lt;%= item %>
+		&lt;/li>
+	&lt;%
+		})
+	%>
+
+	&lt;%= JSON.stringify(danhsach.sanpham) %>
+</pre>
+	<h2>Ghép giao diện Frontend vào NodeJS sử dụng Router và EJS</h2>
+		<li>B1: Chuẩn bị 1 template</li>
+			<p>Tham khảo nguồn:</p>
+			<p><a href="https://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+		<li>B2: Cấu trúc lại các file</li>
+		<p>Chú ý link dẫn cấu hình trong EJS không có /public</p>
+		<p></p><li>B3: cấu hình router</li></p>
+		<li>B4: chuyển header và footer ra 1 file riêng. include vào file muốn hiển thị</li>
+<pre>
+	<% include header %>
+	<% include footer %>
+</pre>
+	<h2>Cookie trong Nodejs</h2>
+	<li>Tạo cookie: res.cookie()</li>
+<pre>
+	router.get('/setcookie/:name', function(req, res, next) {
+		res.cookie('name', req.params.name)
+		res.send(`ten là ` + req.params.name);
+	  });
+</pre>
+	<li>Lấy cookie: req.cookies.[ten]</li>
+<pre>
+	router.get('/getcookies', function(req, res, next) {
+		res.send(`Tên bạn là ` + req.cookies.name);
+	  });
+</pre>
+	<li>Xóa cookie: res.clearCookie()</li>
+<pre>
+	router.get('/clearcookie', function(req, res, next) {
+		res.clearCookie('name')
+		res.send(` Da xoa cookies`);
+	  });
+</pre>
+	<h2>Cookie session</h2>
+		<p>Là cookie lưu tạm thời trên server để phân biệt giữa các máy tính, và dùng cho 1 số tính năng khác</p>
+	<li>Tạo cookie với session: req.session.[ten]</li>
+<pre>
+	router.get('/setsession/:id', function(req, res, next) {
+		req.session.menu = req.params.id
+		res.send(`Da tao session ${req.session.menu} `);
+	});
+</pre>
+	<li>Lấy cookie với session: req.session.[ten]</li>
+<pre>
+	router.get('/getsession', function(req, res, next) {
+		res.send(`menu là ` + req.session.menu);
+	});
+</pre>
+	<li>Xóa cookie với session</li>
+<pre>
+	// var cookieSession = require('cookie-session')
+	req.session = null
+
+	// var session = require('express-session')
+	req.session.destroy(function(err){
+		console.log(err)
+	})
+</pre>
+	<h2>Load và in ra dữ liệu json</h2>
+	<li>load</li>
+<pre>
+	app.locals.fakedata = require('/model/data.json')
+</pre>
+<h1>web portfolio project</h1>
+	<h2>Quy trình làm web</h2>
+	<ol>
+		<li>Thiết kế psd</li>
+		<li>Từ psd chuyển sang html</li>
+		<p>downloa html tại <a href="https://www.themelock.com/" target="_blank">themelock</a></p>
+		<li>Chuyển html vào project Nodejs (express)</li>
+		<li>Đọc dữ liệu json đổ vào file ejs</li>
+		<li>Sử dụng router điều hướng và truyền tham số</li>
+	</ol>
+	<h2>Lấy dữ liệu trong form</h2>
+<pre>
+	index.ejs
+	&lt;form action="/" method="POST">
+		...
+		&lt;input type="text" name="email"...>
+		...
+		&lt;input type="text" name="password"...>
+		...
+	&lt;/form>
+	----
+	router/index.js
+	router.post('/', function(req, res, next) {
+		res.send('email là ' + req.body.email + " password là " + req.body.password);
+	  });
+</pre>
+	<h2>Tạo form upload</h2>
+	<li>tạo form</li>
+	<p><b>Cần enctype="multipart/form-data"</b></p>
+<pre>
+	&lt;form action="" method="POST" enctype="multipart/form-data">&lt;/form>
+</pre>
+	<li>Cài multer và khai báo trong router</li>
+<pre>
+	routes/index.js
+	var multer  = require('multer');
+
+	//Chỉ ra đường dẫn upload và tên file
+	const storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, './public/uploads')
+	},
+	filename: function (req, file, cb) {
+		const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+		cb(null, uniqueSuffix + '-' + file.originalname)
+	}
+	})
+
+	const upload = multer({ storage: storage })
+
+	// tạo router mới 
+	router.post('/uploads', upload.single('imageUpload'), function(req, res, next) {
+		res.send('da upload')
+	});
+</pre>
+	<li>Giới hạn kiểu file upload</li>
+	<p>trang check online regex <a href="https://regex101.com/" target="_blank">regex101.com/</a> </p>
+<pre>
+	function checkFile (req, file, cb) {
+		if(!file.originalname.match(/\.(jpg|png|gif|jpeg)$/)) {
+		  cb(new Error('Chỉ có thể upload file ảnh'))
+		} else {
+		  cb(null, true)
+		}
+	  }
+	  
+	const upload = multer({ storage: storage , fileFilter: checkFile })
+</pre>
+	<h2 class="body">MongoDB</h2>
+		<h3>Khái niệm</h3>
+			<p>Là csdl theo đối tượng</p>
+			<p>- các bảng dữ liệu kiểu json, và không tuân thủ theo cấu trúc nào</p>
+			<p>- Mỗi bảng được đánh dấu id khẳng định tính duy nhất</p>
+		<h3>Cài mongoDB server 4.4 và Compass (cài 5.0.2 bị lỗi) </h3>
+			<li>cài mongodb trên debian <a href="https://docs.mongodb.com/v4.4/tutorial/install-mongodb-on-debian/" target="_blank">mongodb 4.4.10</a></li>
+			<li>cài compass</li>
+		<h3>2 cách thao tác với mongoDB</h3>
+		<li>Thao tác trên terminal</li>
+		<li>Thao tác qua chương trình trung gian (robomongo)</li>
+		<h3>7 câu lệnh thao tác với database và collection (table)</h3>
+		<ol>
+		<li>Khởi động</li>
+<pre>
+	mongod
+</pre>
+		<h4>Nếu lỗi thiếu thư mục thì chạy lệnh tạo thư mục</h4>
+<pre>
+	// Tạo thư mục
+	sudo mkdir -p ~/Documents/mongodb-data
+
+	// cấp toàn quyền cho thư mục
+	sudo chmod 777 ~/Documents/mongodb-data
+
+	// chạy monngodb
+	mongod --dbpath ~/Documents/mongodb-data
+</pre>
+		<li>Khởi tạo Mongo Shell</li>
+<pre>
+	mongo
+</pre>
+		<li>Hiển thị tất cả database</li>
+<pre>
+	show dbs
+</pre>
+		<li>Sử dụng / tạo (nếu chưa có) database</li>
+<pre>
+	use &lt;tencsdl>
+
+	//kiểm tra đã chọn csdl chưa
+	db
+</pre>
+		<li>Xóa database</li>
+<pre>
+	use trước khi xóa
+	use fedu
+
+	db.dropDatabase()
+</pre>
+		<li>Tạo collection</li>
+<pre>
+	db.createCollection('&lt;tencsdl>')
+</pre>
+		<li>Hiển thị các collections</li>
+<pre>
+	show collections // Đang ở database fedu
+</pre>
+		<li>Xóa collection</li>
+<pre>
+	db.&lt;tenCollection>.drop()
+</pre>
+		</ol>
+	<h2>Lay gia tri value</h2>
 <h3>GET dung query</h3>
 <pre>
 	app.get('/search', (req, res) => {
@@ -31,41 +700,13 @@
 	app.use(express.urlencoded({extended: true})) // POST, gui du lieu dang Form Data
 	app.use(express.json()) // POST javascript (XMLHttpRequest, fetch, axios)
 </pre>
-<h2 class="body">MongoDB</h2>
-<h3>Cài mongoDB server 4.4.8 và Compass (cài 5.0.2 bị lỗi) </h3>
-<h3>Lệnh tạo thư mục chưa data</h3>
-<pre>
-// Tạo thư mục
-sudo mkdir -p ~/Documents/mondodb-data
 
-// cấp toàn quyền cho thư mục
-sudo chmod 777 ~/Documents/mondodb-data
+	
 
-// chạy monngodb
-mongod --dbpath ~/Documents/mondodb-data
-</pre>
 
 <h1 class="body">Kien thuc Nodejs ngoai</h1>
 <p class="body">Nguon: <a href="https://www.youtube.com/watch?v=fPf88MxlnEQ&list=PLqnlyu33Xy-6g7IqU5-3BXOfewcJKoL08&index=11" target="_blank">video Youtube</a></p>
-<h2>Module</h2>
-<h3>Tao module</h3>
-<ul>
-<li>module.exports</li>
-</ul>
-<pre>
-	//bar.js
-	module.exports = function(){
-	  console.log('Hello')
-	}</pre>
-<h3>Goi module</h3>
-<ul>
-<li>require</li>
-</ul>
-<pre>
-	//app.js
-	var bar = require('./bar.js');
-	bar();
-</pre>
+
 <h2>Khai bao va su dung function</h2>
 <pre>
 	function sayHello(){
@@ -186,93 +827,6 @@ mongod --dbpath ~/Documents/mondodb-data
 	    english2: englis1,
 	    vietnamese2: vietnames1
 	}
-</pre>
-<h2>Cac cach khai bao module</h2>
-<p><p>Tep 20tkvlogs</p></p>
-<h3>Hello1.js</h3>
-<pre>
-	module.exports = function(){
-	    console.log("Hello1 word")
-	}
-</pre>
-<b>app.js</b>
-<pre>
-	var hello1 = require("./hello1");
-	hello1();
-</pre>
-<h3>Hello2.js</h3>
-<p>module.exports la object, co the gan thuoc tinh</p>
-<pre>
-	module.exports.sayHello = function() {
-	    console.log("Hello2 word")
-	}
-</pre>
-<b>app.js (1)</b>
-<pre>
-	var hello2a = require("./hello2");
-	hello2a.sayHello();
-</pre>
-<b>app.js (2)</b>
-<pre>
-	var hello2b = require("./hello2").sayHello;
-	hello2b();
-</pre>
-<h3>Hello3.js</h3>
-<p>Tao doi tuong va khoi tao san</p>
-<pre>
-	function Person(){
-	    this.message = "Hello3 word",
-	    this.sayHello = function() {
-	        console.log(this.message)
-	    }
-	}
-	module.exports = new Person()
-</pre>
-<b>app.js</b>
-<pre>
-	var hello3 = require("./hello3");
-	hello3.sayHello();
-
-	hello3.message = "change hello3 world"
-	hello3.sayHello()
-</pre>
-<h3>Hello4.js</h3>
-<p>tao doi' tuong nhung chua khoi tao san</p>
-<pre>
-	function Person(){
-	    this.message = "Hello4 word",
-	    this.sayHello = function() {
-	        console.log(this.message)
-	    }
-	}
-	module.exports = Person;
-</pre>
-<b>app.js</b>
-<pre>
-	var Hello4 = require("./hello4");
-	var hello4 = new Hello4();
-	hello4.sayHello();
-</pre>
-<h3>Hello5.js</h3>
-<p>exports nhu 1 doi' tuong</p>
-<pre>
-	var message = "Hello 5 word"
-	function sayHello(){
-	    console.log(message)
-	}
-	module.exports = {
-	    sayHello: sayHello
-	}
-</pre>
-<b>app.js (1)</b>
-<pre>
-	var hello5a = require("./hello5");
-	hello5a.sayHello();
-</pre>
-<b>app.js (2)</b>
-<pre>
-	var hello5b = require("./hello5").sayHello;
-	hello5b();
 </pre>
 
 
@@ -690,76 +1244,9 @@ mongod --dbpath ~/Documents/mondodb-data
 
 	}).listen(1111, "127.0.0.1")
 </pre>
-<h2>Mo html tren nodejs server</h2>
-<pre>
-	var http = require("http")
-	var fs = require("fs")
 
-	http.createServer(function(req, res){
 
-	    res.writeHead(200, {'Content-Type': 'text/html'})
-	    var html = fs.readFileSync(__dirname + "/index.html", "utf-8")
 
-	    var user = "Hoa Mai";
-	    html = html.replace("user", user)
-
-	    res.end(html)
-
-	}).listen(1111, "127.0.0.1")
-</pre>
-<h2>Cai thien hieu nang doc file voi PIPE</h2>
-<b>createReadStream().pipe()</b>
-<pre>
-	var http = require("http");
-	var fs = require("fs");
-
-	http.createServer(function(req, res){
-
-	    res.writeHead(200, {'Content-Type':'text/html'});
-	    fs.createReadStream(__dirname + "/index.html").pipe(res);
-
-	}).listen(1111,"127.0.0.1")
-</pre>
-<h2>JSON từ webserver</h2>
-<pre>
-	var http = require("http");
-	var fs = require("fs");
-
-	http.createServer(function(req, res){
-
-	    res.writeHead(200, {'Content-Type':'application/json'});
-	    var obj = {
-	        fname: "Hoa",
-	        lname: "Mai"
-	    }
-	    res.end(JSON.stringify(obj))
-	}).listen(1111,"127.0.0.1")
-</pre>
-<h2>Dinh tuyen url</h2>
-<pre>
-	var http = require("http");
-	var fs = require("fs");
-
-	http.createServer(function(req, res){
-	    if (req.url === "/" || req.url === "/index.html") {
-
-	        res.writeHead(200, {'Content-Type':'text/html'}); // dong nay ko co cung duoc
-	        fs.createReadStream(__dirname + "/index.html").pipe(res)
-	    } else  if (req.url === "/api"){
-	        res.writeHead(200, {'Content-Type':'application/json'}); //ko co cung duoc
-	        var obj = {
-	            fname: "Hoa",
-	            lname: "Mai"
-	        };
-	        res.end(JSON.stringify(obj));
-	    } else {
-	        res.writeHead(404)
-	        res.end("Not found")
-	    }
-	}).listen(1111,"127.0.0.1", function(){
-	    console.log("Da khoi tao server: http://localhost:1111")
-	})
-</pre>
 <h2>VERSIONING SEMANTIC</h2>
 <a href="https://semver.org/" target="_blank">Tham khao https://semver.org/</a>
 <p><b>MAJOR.MINOR.PATCH</b></p>
@@ -769,68 +1256,11 @@ mongod --dbpath ~/Documents/mondodb-data
 	<li>MINOR: them tinh nang</li>
 	<li>PATCH: fix bug</li>
 </ul>
-<h2>INT, NODEMON và PACKAGE.JSON (P1)</h2>
-<pre>npm init
-npm i --save lodash</pre>
-<b>package.json</b>
-<pre>
-{
-  "name": "my-app",
-  "version": "1.0.0",
-  "description": "my first app",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "lam",
-  "license": "MIT",
-  "dependencies": {
-    "lodash": "^4.17.21"
-  }
-}
-</pre>
-<b>^4.17.21: ^ cap nhat tat ca. thay bang ~ chi cap nhat PATCH</b>
-<pre>
-	var _ = require("lodash")
 
-	var array = [1];
-	var other = _.concat(array,1,[2],[[4]])
-	console.log(other)
 
-	var dif = _.difference([2,1],[2,3])
-	console.log(dif)
 
-	var users = [
-	    { 'user': 'barney',  'age': 36, 'active': true },
-	    { 'user': 'fred',    'age': 40, 'active': false },
-	    { 'user': 'pebbles', 'age': 1,  'active': true }
-	  ];
 
-	var find1 = _.find(users, function(user) {return user.age <40}, 1)
-	console.log("age<40 ",find1)
 
-	var find2 = _.find(users, ['age', 40])
-	console.log("age = 40 ",find2)
-
-	var find3 = _.find(users, {'active': true})
-	console.log(find3)
-
-	var filter = _.filter(users, function(user) {return user.age < 40})
-	console.log(filter)
-</pre>
-<h2>NPM Global</h2>
-<p>kiem tra noi chu'a node-module de cai global</p>
-<pre>	npm root -g</pre>
-<pre>	npm install -g ...</pre>
-<h2>INT, NODEMON và PACKAGE.JSON (P2)</h2>
-<p>Cai thu muc node_modules khi co san file package.json</p>
-<pre>	npm install</pre>
-<pre>	npm init // cai moi' hoan toan</pre>
-<p>update tinh nang</p>
-<pre>	npm update</pre>
-<p>cai cac tien ich (ko bat buoc)</p>
-<pre>	npm install mocha chai grunt --save-dev</pre>
-<pre> nodemon app.js</pre>
 <h2>Cài đặt EXPRESS và xây dựng một WEB SERVER hoàn chỉnh</h2>
 <pre>npm install express --save</pre>
 <pre>
@@ -853,13 +1283,7 @@ npm i --save lodash</pre>
 	  console.log("sever: http://localhost:3000")
 	})
 </pre>
-<h2>Routing dinh tuyen</h2>
-<pre>
-	app.get("/user/:id", function(req, res){
-	  res.send(`Hello ${req.params.id}`)
-	})
-</pre>
-<p>??? mo 1 trang html??</p>
+
 <h2>MIDDLEWARE trong express</h2>
 <pre>
 	var express = require("express")
@@ -901,26 +1325,7 @@ npm i --save lodash</pre>
 	  console.log("sever: http://localhost:3000")
 	})
 </pre>
-<h2>#71 TEMPLATE và TEMPLATE ENGINE</h2>
-<p>tep 71tkvlogs</p>
 
-<p>express dung duoc nhieu template</p>
-<a href="https://ejs.co/" target="_blank">https://ejs.co/</a>
-<pre>npm install ejs --save</pre>
-<p>khong can dung var ejs = require('ejs'). Vi ejs da cai trong express. Dung lenh app.set()</p>
-
-<pre>
-	app.set('view engine', 'ejs')</pre>
-<pre>
-	app.get("/", function(req, res) {
-	    res.render('index');
-	});
-</pre>
-<pre>
-	app.get("/user/:id", function(req, res){
-	    res.render('user', { ID : req.params.id})
-	})
-</pre>
 <h2>#72 NodeJS - QUERYSTRING và POST PARAMETER</h2>
 <p>tep 72tkvlogs</p>
 <pre>https://www.google.com/search?q=google&oq=go&aqs=chrome.0.69i59j69i57j35i39j0i131i433i512l2j69i60l3.2360j0j4&sourceid=chrome&ie=UTF-8</pre>
@@ -961,18 +1366,7 @@ npm i --save lodash</pre>
 
 
 <h1 class="body">Node.js Tutorial</h1>
-<h2 class="body">Node.js Get Started</h2>
-<p>Tao file myfirst.js</p>
-<pre>
-	var http = require('http');
 
-	http.createServer(function (req, res) {
-	  res.writeHead(200, {'Content-Type': 'text/html'});
-	  res.end('Hello World!');
-	}).listen(8080);
-</pre>
-<p>Chay lenh Cmd</p>
-<pre>node myfirst.js</pre>
 <h2 class="body">Node.js Modules</h2>
 <h3>require()</h3>
 <pre>var http = require('http')</pre>
@@ -1168,8 +1562,7 @@ http.createServer(function (req, res) {
 	  });
 	}).listen(8080);
 </pre>
-<h2 class="body">Node.js NPM</h2>
-<pre>npm install upper-case</pre>
+
 <h2 class="body">Node.js Events</h2>
 
 <h3>Events Module</h3>

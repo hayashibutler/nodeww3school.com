@@ -1,8 +1,15 @@
 body {
 	padding: 5%;
 }
-.body {
+.body, h1, h2 {
 	text-align: center;
+}
+pre {
+	color: #fff;
+	background-color: #333;
+	border-radius: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 .nodetest{
 	position: fixed;
