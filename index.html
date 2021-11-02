@@ -640,7 +640,7 @@
 	sudo chmod 777 ~/Documents/mongodb-data
 
 	// chạy monngodb
-	mongod --dbpath ~/Documents/mongodb-data
+	mongod --port 27017 --dbpath ~/Documents/mongodb-data
 </pre>
 		<li>Khởi tạo Mongo Shell</li>
 <pre>
@@ -676,7 +676,215 @@
 <pre>
 	db.&lt;tenCollection>.drop()
 </pre>
+		<li>Thêm Document vào Collection</li>
+<pre>
+	db.&lt;tenCollection>.insert(dữ liệu json)
+	db.dsweb.insert({"tenweb":"tiki", "linkeweb":"http://tiki.vn"})
+</pre>
+		<p>Cách 2: đặt biến</p>
+<pre>
+	var addweb = {}
+	addweb.tenweb = "lazada"
+	addweb.linkweb = "http://lazada.com"
+
+	db.dsweb.insert(addweb)
+</pre>
+	<p>Ngoài ra còn có phương thức: save(), insertOne(), insertMany(). <a href="https://vncoder.vn/bai-hoc/mongodb-chen-document-345" target="_blank">Tại đây</a> </p>
+		<li>Hiển thị Documents</li>
+<pre>
+	//Hiển thị dữ liệu
+	db.&lt;tenCollection>.find()
+
+	//hiển thị dữ liệu đẹp giống json
+	db.&lt;tenCollection>.find().pretty()
+</pre>
+		<p><b>chỉnh định field hiển thị</b></p>
+<pre>
+	db.&lt;tenCollection>.find({condition},{field1:1,field2:0,...})
+
+	1 -> hiển thị
+	0 -> không hiển thị
+</pre>
+<pre>
+	db.player.find({},{'name':1})
+</pre>
+		<p> <a href="https://vncoder.vn/bai-hoc/mongodb-truy-van-document-346" target="_blank">Điều kiện find({condition})</a></p>
+<pre>
+	&lt;key>:&lt;value>
+</pre>
+		<ul>
+			<li>WHERE</li>
+			<li>AND</li>
+		<pre>
+			dấu phẩy (,)</pre>
+			<li>OR</li>
+		<pre>
+			$or:</pre>
+			<li>NOR</li>
+		<pre>
+			$not:</pre>
+			<li>NOT</li>
+		<pre>
+			$NOT:</pre>
+		</ul>
+		<p><b>Giới hạn limit() và bỏ qua skip()</b></p>
+<pre>
+	db.&lt;tenCollection>.find().limit(NUMBER).skip(NUMBER)
+</pre>
+		<p><b>Sắp xếp Documents</b></p>
+<pre>
+	db.&lt;tenCollection>.find().sort({field1:1, field2:-1,...})
+
+	1 -> tăng dần
+	2 -> giảm dần
+</pre>
+		<li>Cập nhật Document</li>
+<pre>
+	db.&lt;tenCollection>.update(
+		&lt;điều kiện>,
+		&lt;update cái gì>,
+		{
+			updert: true, //
+			multi: true   // update nhiều document
+		}
+	)
+</pre>
+		<p>Ví dụ: $set (update) & multi: true</p>
+<pre>
+	db.dsweb.update(
+		{"tenweb" : "tiki"},
+		{$set:{"linkeweb" : "http://tiki.com" }},
+		{multi: true}	
+	)
+</pre>
+		<p>Ví dụ: $unset (deploy) & multi: true</p>
+<pre>
+	db.dsweb.update(
+		{"tenweb" : "tiki"},
+		{$set:{"linkeweb" : "http://tiki.com" }},
+		{multi: true}	
+	)
+</pre>
+		<p>Ví dụ: upsert: true</p>
+<pre>
+	Tạo mới keyDocument (nếu có Document, không có keyDocument)
+
+	Tạo mới Document (nếu không có Document)
+</pre>
+		<p>$rename(tencu : tenmoi)</p>
+<pre>
+	// rename 1 trường
+	db.dsweb.update({},{$rename:{"tenweb":"congty"}})
+
+	//rename multi
+	db.dsweb.update({},{$rename:{"tenweb":"congty"}}, {multi:true})
+
+</pre>
+		<p><b>Note: câu lệnh truy vấn</b></p>
+		<p>query and projection <a href="https://docs.mongodb.com/manual/reference/operator/query/" target="_blank">Document MongoDB</a></p>
+		
+		<li>Xóa Document</li>
+<pre>
+	db.&lt;tenCollection>.remove(
+		&lt;điều kiện>,
+		{
+			justone:true
+		}
+	)
+</pre>
+<pre>
+	// Xóa 1 Document
+	db.dsweb.remove({"congty":"taobao"},{justone:true})
+
+	// Xóa nhiều Documents
+	db.dsweb.remove({"congty":"taobao"},{justone:false})
+
+	// Xóa tất cả
+	db.dsweb.remove({})
+</pre>
 		</ol>
+		<h2>export và import</h2>
+		<ol>
+			<b><li>export</li></b>
+				<ul>
+					<li>export database</li>
+<pre>
+	mongodump -d &lt;tendatabase> -o &lt;tenfolderluutru>
+</pre>
+<pre>
+	mongodump -d fedu -o ~/Documents/exportdatabase
+</pre>
+					<li>export collection</li>
+<pre>
+	mongoexport -d &lt;tendatabase> -c &lt;tencollection> -o &lt;tenfile.json>
+</pre>
+<pre>
+	mongoexport -d fedu -c dsweb -o ~/Documents/exportdatabase/ds.json
+</pre>
+					<p><b>Note: chạy trên terminal mới, không chạy trên mongo shell (truy xuất dữ liệu)</b></p>
+				</ul>
+			<b><li>import</li></b>
+				<ul>
+					<li>import database</li>
+<pre>
+	mongorestore -d &lt;tendatabase> &lt;tenfolder>
+</pre>
+<pre>
+	mongorestore -d fedu2 ~/Documents/exportdatabase/fedu
+</pre>
+					<li>import collection</li>
+<pre>
+	mongoimport -d &lt;tendatabase> -c &lt;tenCollection> --file &lt;tenfile>
+</pre>
+<pre>
+	mongoimport -d fedu1 -c bangdl --file ~/Documents/exportdatabase/ds.json
+</pre>
+				</ul>
+		</ol>
+	<h2>Bài toán kinh điển: lập trình thêm - xem - sửa - xóa dl với NodeJS và MongoDB - node-mongodb-native</h2>
+	<p>Bản chất của việc lập trình với backend website là làm việc với dữ liệu</p>
+	<ol>
+		<li><b>Tạo project mới</b></li>
+		<p>
+			sau khi tạo project mới với express. Cài 
+			<a href="https://github.com/mongodb/node-mongodb-native" target="_blank">node-mongodb-native</a>
+		</p>
+<pre>
+	npm install mongodb
+</pre>
+		<li><b>Tạo database mới</b></li>
+			<p>Kết nối dữ liệu</p>
+		<li><b>Tạo view thêm dl</b></li>
+			<ol>
+				<li>Tạo 1 router để thêm nội dung dl mới</li>
+				<li>router gắn với ejs</li>
+				<li>Tạo thêm router 2 với kiểu "POST"</li>
+				<li>Tại router 2 sẽ lấy dl trong router 1 gửi lên monngoDB</li>
+			</ol>
+		<li><b>view xem dl</b></li>
+			<ol>
+				<li>Tạo view ejs</li>
+				<li>Sử dụng docs github để lấy câu lệnh dữ liệu</li>
+			</ol>
+		<li>Lập trình phần xóa dl</li>
+			<ol>
+				<li>Lấy về id documents cần xóa: dùng router truyền vào id</li>
+				<li>Viết js confirm xóa</li>
+				<li>Sử dụng hàm xóa</li>
+			</ol>
+			<p>Note</p>
+<pre>
+	_id là Object Id. Phải chuyển dữ liueej sang object
+
+	const chuyenObjectId = require('mongodb').ObjectID;
+	var idcanxoa = chuyenObjectId(req.params.idcanxoa);
+</pre>
+		<li>Tạo view edit dl</li>
+			<ol>
+				<li>Lấy id và tạo view router get</li>
+				<li>Tạo router post, update dữ liệu vào mongo</li>
+			</ol>
+	</ol>
 	<h2>Lay gia tri value</h2>
 <h3>GET dung query</h3>
 <pre>
