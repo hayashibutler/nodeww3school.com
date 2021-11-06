@@ -614,6 +614,16 @@
 	  
 	const upload = multer({ storage: storage , fileFilter: checkFile })
 </pre>
+	<h2>Upload nhiều file với Dropzone</h2>
+	<ol>
+		<li>Tạo project mới</li>
+		<li>Cài multer</li>
+		<li>Cài dropzone</li>
+		<li>Tạo trang upload</li>
+		<p>Trang hướng dẫn dropzone <a href="https://www.sitepoint.com/file-upload-form-express-dropzone-js/" target="_blank">sitepoint</a></p>
+		<li>upload thật</li>
+		<p>Dùng module multer như trên với upload.any()</p>
+	</ol>
 	<h2 class="body">MongoDB</h2>
 		<h3>Khái niệm</h3>
 			<p>Là csdl theo đối tượng</p>
@@ -843,6 +853,7 @@
 		</ol>
 	<h2>Bài toán kinh điển: lập trình thêm - xem - sửa - xóa dl với NodeJS và MongoDB - node-mongodb-native</h2>
 	<p>Bản chất của việc lập trình với backend website là làm việc với dữ liệu</p>
+	<p>Tài liệu mongodb <a href="https://mongodb.github.io/node-mongodb-native/3.7/quick-start/quick-start/" target="_blank">Tại đây</a></p>
 	<ol>
 		<li><b>Tạo project mới</b></li>
 		<p>
@@ -885,6 +896,55 @@
 				<li>Tạo router post, update dữ liệu vào mongo</li>
 			</ol>
 	</ol>
+	<h2>Với MONGOOSE - MongoDB</h2>
+	<h3>Tại sao? phân tách rõ vai trò theo mô hình MVC</h3>
+	<ul>
+		<li>view = file ejs</li>
+		<li>model = mongoose</li>
+		<li>controller = router</li>
+	</ul>
+	<p>Tài liệu mongoose <a href="https://mongoosejs.com/docs/index.html" target="_blank">Tại đây</a></p>
+	<h3>Kết nối mongoose với Nodejs</h3>
+		<ul>
+			<li>Mỗi database là 1 url</li>
+<pre>
+	mongoose.connect('mongodb://localhost:27017/test')
+</pre>
+			<li>kết nối với database</li>
+<pre>
+	mongoose.connect('mongodb://localhost:27017/dataMongoose')
+</pre>
+			<li>kết nối với collection</li>
+			<p>Tạo ra 1 model. ví dụ, collection tên là contact</p>
+			<p>Tất cả collection muốn sử dụng được, phải chuẩn bị schema</p>
+			<p>sau đó export nó ra</p>
+<pre>
+	Tạo model/contact.js
+	---
+	const mongoose = require('mongoose');
+
+	const contact = new mongoose.Schema({ name: 'string', phone: 'number' }, {collection: 'contact'});
+	module.exports = mongoose.model('contact', contact);
+</pre>
+		</ul>
+	<h3>Trang view dl</h3>
+	<ul>
+		<li>Tạo trang view</li>
+		<li>Tạo router get</li>
+		<li>Dùng model lấy dữ liệu, đẩy vào view</li>
+	</ul>
+	<h3>Trang tạo mới dữ liệu</h3>
+<pre>
+	router.post('...',function(req, res, next) {
+		...
+		Model.create(dulieu)
+		// var dulieu = new Model(dulieu)
+		...
+	  });
+</pre>
+	<h2>PostgreSQL</h2>
+
+
 	<h2>Lay gia tri value</h2>
 <h3>GET dung query</h3>
 <pre>
